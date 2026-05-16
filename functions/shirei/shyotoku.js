@@ -1,17 +1,10 @@
 // 路由：/shirei/shyotoku?target=xxx&password=xxx
-// B 端索取指令，使用 A 端密码，取出后删除指令（一次性）
+// B 端索取指令，使用 B 端密码，取出后删除指令（一次性）
+const DEFAULT_B_PASSWORD = "fixed-b-password-2025";
+
 async function isTargetRegistered(env, target) {
   const reg = await env.DATA.get(`reg_${target}`);
   return reg !== null;
-}
-
-async function getAPassword(env) {
-  let aPass = await env.DATA.get("a_password");
-  if (aPass === null) {
-    aPass = "default-a-password";
-    await env.DATA.put("a_password", aPass);
-  }
-  return aPass;
 }
 
 export async function onRequest(context) {
@@ -20,12 +13,15 @@ export async function onRequest(context) {
   const target = url.searchParams.get("target");
   const password = url.searchParams.get("password");
 
+  // 获取 B 端密码（优先环境变量，否则默认）
+  const bPassword = DEFAULT_B_PASSWORD;
+
   if (!target || !password) {
     return new Response("404 Not find", { status: 404 });
   }
 
-  const aPassword = await getAPassword(env);
-  if (password !== aPassword) {
+  // 验证 B 端密码
+  if (password !== bPassword) {
     return new Response("404 Not find", { status: 404 });
   }
 

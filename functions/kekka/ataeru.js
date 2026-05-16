@@ -14,7 +14,7 @@ export async function onRequest(context) {
   const result = url.searchParams.get("result");
   const password = url.searchParams.get("password");
 
-  const bPassword = env.B_PASSWORD || DEFAULT_B_PASSWORD;
+  const bPassword = DEFAULT_B_PASSWORD;
 
   if (!target || !result || !password) {
     return new Response("404 Not find", { status: 404 });

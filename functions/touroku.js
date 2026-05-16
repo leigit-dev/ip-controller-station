@@ -8,8 +8,8 @@ export async function onRequest(context) {
   const name = url.searchParams.get("name");
   const password = url.searchParams.get("password");
 
-  // 获取 B 端密码（优先环境变量，否则默认）
-  const bPassword = env.B_PASSWORD || DEFAULT_B_PASSWORD;
+  // 获取 B 端密码
+  const bPassword = DEFAULT_B_PASSWORD;
 
   if (!name || !password) {
     return new Response("404 Not find", { status: 404 });
